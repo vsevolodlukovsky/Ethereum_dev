@@ -1,0 +1,43 @@
+//smart contract that shows number if you pay some tokens
+//Also we need the moment after predetermined time
+
+// solidity compiler version
+pragma solidity ^0.4.11;
+
+// describe ERC20Token; included only necessary functions
+contract ERC20Token {
+    function transfer(address _receiver, uint256 _amount) public; //transfer tokens function
+    mapping (address => uint256) public balanceOf; //standard ERC20token balance mapping
+    function balance (address _owner)  public returns(uint256) //we need function to show balance in other contract
+    {
+        return balanceOf[_owner];
+    }
+}
+
+
+contract showNumber
+{
+ uint16 private number=5; //hidden number - private
+ uint256 public numberShow; //show variable - public
+ uint16 public lastTime; //after this time u can see number
+ ERC20Token token;
+ uint16 public tokenQuantityNeed; // Price in tokens to show the number
+ uint16 public tokenQuantityToTransfer; // Price in tokens to transfer
+ function showNumber(ERC20Token _token) //initialisation contract
+ {
+ token=_token; //you can use token address to initial contract
+ }
+
+ function () public
+ {       /*Quantity transferred tokens have to bigger than tokenQuantityNeed;*/
+         /*balance tokens sender have to bigger than quantity transferred tokens*/
+         /*You can see the number after predetermined time*/
+   if (token.balance(msg.sender) > tokenQuantityNeed && tokenQuantityToTransfer>tokenQuantityNeed && now>lastTime )
+   {
+     address mycontract=0x074dbb7a34D8E75C5Dc93F2E9D3dAe5231C5581D; //for example my ETH address
+     token.transfer(mycontract,tokenQuantityToTransfer); //for example send tokens to my contract
+     numberShow=number; //show the number in public variable 
+   }
+ }
+
+}
