@@ -1,0 +1,42 @@
+pragma solidity ^0.4.16;
+
+interface testCoin {
+    function transfer(address receiver, uint amount) public;
+    function balance(address owner) public returns (uint256);
+} //ERC20 токен
+
+contract test
+{
+ address public owner;
+ testCoin Coin;
+ address[] listFund;
+
+    
+ function test (address _testCoin, address[] _listFund) public      //constructor
+ {
+  Coin=testCoin(_testCoin);
+  owner=msg.sender;
+  listFund=_listFund;
+ }
+ 
+ function fund () //owner владеет этим контрактом, токены отправяются с его собственного адреса (предположим, их завели предварительно), только он может вызвать контракт
+ {
+   require(msg.sender == owner)  ; //без этого условия в общем-то любой может поделиться своими токенами в равных частях - можно убрать, получится такой контракт для благотворительности :)
+   uint16 i=0;
+   
+   uint256 tokens=Coin.balance(owner);
+   uint256 length=listFund.length;
+   require(length!=0);
+   tokens=tokens/(length); //без SafeMath, но вообще в курсе :) посчитали, сколько токенов раздаем
+   
+   while (i!=length) 
+   { 
+     address getter=listFund[i];
+     i+=1;
+     Coin.transfer(getter,tokens) ; //отправляем токены с собственного адреса
+   }
+   
+ }
+ 
+  
+}
