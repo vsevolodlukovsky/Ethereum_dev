@@ -145,8 +145,8 @@ contract Ownable {
 
 }
 
-// Создаем контракт ReanimatorCoin
-contract ReanimatorCoin is StandardToken, Ownable {
+// Создаем контракт BCharityCoin
+contract BCharityCoin is StandardToken, Ownable {
 
   string public name = "BCharity Coin";
   string public symbol = "BFA";
